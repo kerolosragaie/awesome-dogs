@@ -10,10 +10,6 @@ import com.bumptech.glide.Glide
 import com.kerollosragaie.awesomedogs.api.ApiRetriever
 import com.kerollosragaie.awesomedogs.api.DogsData
 import com.kerollosragaie.awesomedogs.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -70,31 +66,23 @@ class MainActivity : AppCompatActivity() {
 
         apiCall.enqueue(object : Callback<DogsData> {
             override fun onResponse(call: Call<DogsData>, response: Response<DogsData>) {
-                //Using coroutines:
-                GlobalScope.launch(Dispatchers.IO) {
-                    try {
-                        Log.d("Main", "Size ${response.body()?.fileSizeBytes}")
-                        //stop downloading images that are more than 4 MB
-                        //400_000 for 4 MB
-                        if (response.body()!!.fileSizeBytes < 400_000) {
-                            //only we can change UI components on main thread:
-                            withContext(Dispatchers.Main) {
-                                Glide.with(applicationContext).load(response.body()?.url)
-                                    .into(binding.ivRandomDog)
-
-                                binding.ivRandomDog.visibility = View.VISIBLE
-                            }
-                        } else {
-                            //will do in recursive till get an image size<4MB
-                            makeApiRequest()
-                        }
-                    } catch (e: Exception) {
-                        //Log.e which is used for exceptions
-                        Log.e("Main", "Error: ${e.message}")
+                try {
+                    Log.d("Main", "Size ${response.body()?.fileSizeBytes}")
+                    //stop downloading images that are more than 4 MB
+                    //400_000 for 4 MB
+                    if (response.body()!!.fileSizeBytes < 400_000) {
+                        Glide.with(applicationContext).load(response.body()?.url)
+                            .into(binding.ivRandomDog)
+                        binding.ivRandomDog.visibility = View.VISIBLE
+                    } else {
+                        //will do in recursive till get an image size<4MB
+                        makeApiRequest()
                     }
+                } catch (e: Exception) {
+                    //Log.e which is used for exceptions
+                    Log.e("Main", "Error: ${e.message}")
                 }
             }
-
             override fun onFailure(call: Call<DogsData>, t: Throwable) {
             }
 
