@@ -32,10 +32,10 @@
         app:lazyloader_dotsDist="10dp"
         app:lazyloader_dotsRadius="7dp"
         app:lazyloader_firstDelayDur="150"
-        app:lazyloader_firstDotColor="#F44336"
+        app:lazyloader_firstDotColor="#FFFFFF"
         app:lazyloader_secondDelayDur="300"
-        app:lazyloader_secondDotColor="#E91E63"
-        app:lazyloader_thirdDotColor="#673AB7"
+        app:lazyloader_secondDotColor="#FFFFFF"
+        app:lazyloader_thirdDotColor="#FFFFFF"
         app:lazyloader_interpolator="@android:anim/accelerate_decelerate_interpolator"/>
 
     <ImageView
